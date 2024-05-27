@@ -9,7 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias SorceryGame.Schemas.{Player, BattleArena, Team, SpellType, SpellInstance}
+alias Src.Schemas.{Player, BattleArena, Team, SpellType, SpellInstance}
 alias SorceryGame.Repo
 
 arena_names = ["Ice Room", "Candy Land", "Fire Pit"]
