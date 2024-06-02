@@ -32,7 +32,8 @@ defmodule SorceryGame.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:sorcery, "~> 0.3.0"},
+      #{:sorcery, "~> 0.3.0"},
+      {:sorcery, path: "../sorcery"},
 
 
       {:phoenix, "~> 1.7.11"},

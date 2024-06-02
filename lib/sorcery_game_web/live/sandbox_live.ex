@@ -4,6 +4,7 @@ defmodule SorceryGameWeb.SandboxLive do
 
   #alias Sorcery.Mutation, as: M
 
+  @impl true
   def mount(_param, _sess, socket) do
     socket = 
       socket
@@ -19,19 +20,30 @@ defmodule SorceryGameWeb.SandboxLive do
     {:ok, socket}
   end
 
+  @impl true
+  def handle_info({:sorcery, _} = msg, socket), do: handle_sorcery(msg, socket)
+
+  @impl true
   def handle_event("change_hp", %{"id" => idstr, "amount" => amountstr}, socket) do
     id = String.to_integer(idstr)
     amount = String.to_integer(amountstr)
 
     Sorcery.Mutation.init(socket.assigns.sorcery, :battle_portal)
     |> Sorcery.Mutation.update([:player, id, :health], fn _old_health, health -> health + amount end)
-    |> Sorcery.Mutation.send_mutation()
+    |> Sorcery.Mutation.send_mutation(socket.assigns.sorcery)
+    |> case do
+      {:ok, new_sorcery} ->
+        socket = assign(socket, :sorcery, new_sorcery)
+        {:noreply, socket}
+
+      {:error, _} ->
+        {:noreply, socket}
+    end
         
-    {:noreply, socket}
   end
 
 
-
+  @impl true
   def render(assigns) do
   ~H"""
   <div>Rendering sandbox</div>

@@ -27,12 +27,12 @@ end
 for name <- arena_names do
   arena = Repo.insert!(BattleArena.gen_cs(%{name: name}))
 
-  # 5 teams are in each arena
-  for _n <- 1..5 do
+  # 2 teams are in each arena
+  for _n <- 1..2 do
     team = Repo.insert!(Team.gen_cs(%{location_id: arena.id}))
 
-    # 4 players on each team
-    for _n <- 1..4 do
+    # 2 players on each team
+    for _n <- 1..2 do
       Repo.insert!(Player.gen_cs(%{team_id: team.id}))
     end
   end

@@ -1,31 +1,33 @@
 defmodule Src.PortalServers.Postgres do
   use GenServer
-  use Sorcery.PortalServer
+  use Sorcery.GenServerHelpers
+
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
+
+  @impl true
   def init(_) do
     state = %{} # You can still add whatever you want here
-
-    state = Sorcery.PortalServer.add_portal_server_state(state, %{
-      config_module: Src,      # This is a required key
+    state = initialize_sorcery(state, %{
+      config_module: Src,
       store_adapter: Sorcery.StoreAdapter.Ecto,
-
       args: %{
         repo_module: SorceryGame.Repo
       }
     })
+
     {:ok, state}
   end
 
 
-  def handle_info("asdfasdf", state) do
-    dbg "adsf"
-    {:noreply, state}
+  @impl true
+  def handle_info({:sorcery, msg}, state) do
+    src = Sorcery.PortalServer.handle_info(msg, state.sorcery)
+    {:noreply, Map.put(state, :sorcery, src)}
   end
 
 
 end
-
